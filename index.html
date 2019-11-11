@@ -47,39 +47,261 @@ class: center, middle
 .center[![RUST](https://upload.wikimedia.org/wikipedia/ru/d/d5/Rust_programming_language_black_logo.svg)]
 # Rust
 [rʌst] - раст
+
+A language empowering everyone
+to build reliable and efficient software.
+
+
+
 ---
+.content[
+# .center[Как я выбираю язык программирования]
+.top-img[![PL](giphy__41_.gif)]
+]
+---
+
 .left-column[
-# Почему rust?
+# Почему
+
+Perfomance
+
+Reliability
+
+Productivity
+
 ]
 
 .right-column[
-.center[Github's most loved language]
+#.center[Github's most loved language]
 .top-img[![RUST](screen.png)]
 ]
 ---
+
 .left-column[
-# Почему?
+# Почему
+
+Perfomance
+
+Reliability
+
+Productivity
+
 ]
+
+.right-column[
+#.center[]
+
+- Amazon (https://github.com/firecracker-microvm/firecracker)
+
+- Microsoft (
+  * https://msrc-blog.microsoft.com/2019/09/30/building-the-azure-iot-edge-security-daemon-in-rust/
+  * https://www.youtube.com/watch?v=FYGS2q1bljE
+  )
+
+- Cloudflare (https://blog.cloudflare.com/tag/rust/)
+
+- Linkerd (https://github.com/linkerd/linkerd2-proxy)
+
+- Figma (https://www.figma.com/blog/rust-in-production-at-figma/)
+
+- Линус Торвальдс про rust:
+> That's not a new phenomenon at all. We've had the system people who used Modula-2 or Ada, and I have to say Rust looks a lot better than either of those two disasters
+https://www.infoworld.com/article/3109150/linux-at-25-linus-torvalds-on-the-evolution-and-future-of-linux.html
+]
+---
+.left-column[
+# Почему
+
+##Perfomance
+
+Reliability
+
+Productivity
+
+]
+
+.right-column[
+- https://benchmarksgame-team.pages.debian.net/benchmarksgame/fastest/rust-go.html
+
+- https://www.techempower.com/benchmarks/#section=data-r18&hw=ph&test=fortune
+]
+
+---
+.left-column[
+# Почему
+
+Perfomance
+
+##Reliability
+
+Productivity
+
+]
+
 .right-column[
 
-1. Perfomance
+- Нет UB
 
-2. Reliability
+- Memory safety at compile time
+.top-img[![CVE](graph-1024x398.png)]
+ https://msrc-blog.microsoft.com/2019/07/16/a-proactive-approach-to-more-secure-code/
 
-3. Productivity
+- Нет data races
+
+]
+
+---
+.left-column[
+# Почему
+
+Perfomance
+
+Reliability
+
+##Productivity
+
+]
+
+.right-column[
+
+- Удобные инструменты сборки и управления зависимостями (cargo), пример конфигурационного файла:
+   ```
+   [package]
+   name = "some_app"
+   version = "0.1.0"
+   authors = ["Your Name <you@example.com>"]
+   
+   [dependencies]
+   regex = "1.0"
+   chrono = "0.4"
+   
+   [dev-dependencies]
+   rand = "*"
+   ```
+   Примеры комманд:
+   ```
+   $ cargo check
+   $ cargo test
+   $ cargo run
+   ```
+]
+---
+.left-column[
+# Почему
+
+Perfomance
+
+Reliability
+
+##Productivity
+
+]
+
+.right-column[
+
+- пример 1: 
+  ```
+  struct Point<T> {
+    x: T,
+    y: T,
+  }
+
+  let int_origin = Point { x: 0, y: 0 };
+  let float_origin = Point { x: 0.0, y: 0.0 };
+  ```
+  пример 2:
+  ```
+  let mut vec = Vec::new();
+  let text = "Message";
+  vec.push(text);
+  ```
 
 ]
 ---
+.left-column[
+# Почему
 
-# Agenda
+Perfomance
 
-1. Introduction
-2. Deep-dive
-3. ...
+Reliability
 
+##Productivity
+
+]
+
+.right-column[
+
+- пример 3: 
+  ```
+  use std::ops::Add;
+
+  struct Point {
+      x: i32,
+      y: i32,
+  }
+  
+  impl Add for Point {
+      type Output = Point;
+  
+      fn add(self, other: Point) -> Point {
+          Point { x: self.x + other.x, y: self.y + other.y }
+      }
+  }
+  
+  let p1 = Point { x: 1, y: 0 };
+  let p2 = Point { x: 2, y: 3 };
+  
+  let p3 = p1 + p2;
+  ```
+
+]
 ---
+.left-column[
+# Почему
 
-# Introduction
+Perfomance
+
+Reliability
+
+##Productivity
+
+]
+
+.right-column[
+
+- Встроенные тесты:
+   ```
+   pub fn is_false(a: bool) -> bool {
+    !a
+   }
+
+   pub fn add_two(a: i32) -> i32 {
+       a + 2
+   }
+   
+   #[cfg(test)]
+   mod test {
+       use super::*;
+   
+       #[test]
+       fn is_false_works() {
+           assert!(is_false(false));
+           assert!(!is_false(true));
+       }
+   
+       #[test]
+       fn add_two_works() {
+           assert_eq!(1, add_two(-1));
+           assert_eq!(2, add_two(0));
+           assert_eq!(4, add_two(2));
+       }
+   }
+   ```
+   
+]
+   
+]
+
 
     </textarea>
     <script src="https://remarkjs.com/downloads/remark-latest.min.js">
