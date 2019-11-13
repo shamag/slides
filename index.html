@@ -214,7 +214,7 @@ class: center, middle
   vec.push(text);
   ```
 
-  Generic data type:
+  Generics:
   ```rust
   struct Point<T> {
     x: T,
@@ -224,6 +224,12 @@ class: center, middle
   let int_origin = Point { x: 0, y: 0 };
   let float_origin = Point { x: 0.0, y: 0.0 };
   ```
+  ```rust
+  // Define a function `printer` that takes a generic type `T` which
+  // must implement trait `Display`.
+  fn printer<T: Display>(t: T) {
+    println!("{}", t);
+  }```
 
 ]
 
