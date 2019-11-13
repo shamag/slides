@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Title</title>
+    <title>Rust</title>
     <meta charset="utf-8">
     <style>
       @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
@@ -43,59 +43,37 @@
 class: center, middle
 
 
+.center[![RUST](qr-code.gif)]
 
+
+---
+class: center, middle
 .center[![RUST](https://upload.wikimedia.org/wikipedia/ru/d/d5/Rust_programming_language_black_logo.svg)]
+.center[
 # Rust
 [rʌst] - раст
 
 A language empowering everyone
 to build reliable and efficient software.
 
-
+]
 
 ---
+
 .content[
-# .center[Как я выбираю язык программирования]
-.top-img[![PL](giphy__41_.gif)]
-]
----
-
-.left-column[
-# Почему
-
-Perfomance
-
-Reliability
-
-Productivity
-
-]
-
-.right-column[
-#.center[Github's most loved language]
+#.center[StackOverflow's most loved language]
 .top-img[![RUST](screen.png)]
 ]
 ---
 
-.left-column[
-# Почему
-
-Perfomance
-
-Reliability
-
-Productivity
-
-]
-
-.right-column[
+class: middle
+.content[
 #.center[]
-
+##Кто использует
 - Amazon (https://github.com/firecracker-microvm/firecracker)
 
 - Microsoft (
-  * https://msrc-blog.microsoft.com/2019/09/30/building-the-azure-iot-edge-security-daemon-in-rust/
-  * https://www.youtube.com/watch?v=FYGS2q1bljE
+  https://msrc-blog.microsoft.com/2019/09/30/building-the-azure-iot-edge-security-daemon-in-rust/
   )
 
 - Cloudflare (https://blog.cloudflare.com/tag/rust/)
@@ -103,43 +81,48 @@ Productivity
 - Linkerd (https://github.com/linkerd/linkerd2-proxy)
 
 - Figma (https://www.figma.com/blog/rust-in-production-at-figma/)
+]
+---
+
+class: middle
+.content[
+#.center[]
+
+- bat (https://github.com/sharkdp/bat)
+
+.center[![BAT](https://camo.githubusercontent.com/e3508b01c13eb055f293edb8e24d283c055b2dc1/68747470733a2f2f692e696d6775722e636f6d2f576e64477039482e706e67)]
+]
 
 - Линус Торвальдс про rust:
 > That's not a new phenomenon at all. We've had the system people who used Modula-2 or Ada, and I have to say Rust looks a lot better than either of those two disasters
 https://www.infoworld.com/article/3109150/linux-at-25-linus-torvalds-on-the-evolution-and-future-of-linux.html
 ]
----
-.left-column[
-# Почему
 
+---
+class: center, middle
+.content[
+.center[
+.top-img[![PL](giphy__41_.gif)]
+]
+]
+---
+
+class: middle
+.content[
 ##Perfomance
 
-Reliability
+- Примерно на уровне С
 
-Productivity
+- Почти на порядок быстрее Go, Java в CPU-bound задачах (Нет GC)
 
-]
+- [Бенчмарк 1](https://benchmarksgame-team.pages.debian.net/benchmarksgame/fastest/rust-go.html)
 
-.right-column[
-- https://benchmarksgame-team.pages.debian.net/benchmarksgame/fastest/rust-go.html
-
-- https://www.techempower.com/benchmarks/#section=data-r18&hw=ph&test=fortune
+- [Бенчмарк 2](https://www.techempower.com/benchmarks/#section=data-r18&hw=ph&test=fortune)
 ]
 
 ---
-.left-column[
-# Почему
-
-Perfomance
-
+.content[
 ##Reliability
-
-Productivity
-
-]
-
-.right-column[
-
 - Нет UB
 
 - Memory safety at compile time
@@ -149,23 +132,20 @@ Productivity
 - Нет data races
 
 ]
-
 ---
-.left-column[
-# Почему
-
-Perfomance
-
-Reliability
-
-##Productivity
-
+class: center, middle
+.content[
+.center[
+.top-img[![PL](49125506.jpg)]
+]
 ]
 
-.right-column[
+---
+##Productivity
+.content[
 
 - Удобные инструменты сборки и управления зависимостями (cargo), пример конфигурационного файла:
-   ```
+   ```toml
    [package]
    name = "some_app"
    version = "0.1.0"
@@ -179,28 +159,63 @@ Reliability
    rand = "*"
    ```
    Примеры комманд:
-   ```
+   ```bash
    $ cargo check
    $ cargo test
    $ cargo run
    ```
 ]
 ---
-.left-column[
-# Почему
 
-Perfomance
+.content[
 
-Reliability
-
-##Productivity
-
+- "Дружелюбный" компилятор:
+   ```rust
+   fn main() {
+      let _immutable_binding = 1;
+      let mut mutable_binding = 1;
+      println!("Before mutation: {}", mutable_binding);
+      // Ok
+      mutable_binding += 1;
+      println!("After mutation: {}", mutable_binding);
+      // Error!
+      _immutable_binding += 1;
+      // FIXME ^ Comment out this line
+   }
+   ```
+   [Запустить](https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=ba301bf091afe1712d50f2572d4ba59e)
+   
+   ```bash
+   error[E0384]: cannot assign twice to immutable variable `_immutable_binding`
+     --> src/main.rs:13:9
+      |
+   2  |         let _immutable_binding = 1;
+      |             ------------------
+      |             |
+      |             first assignment to `_immutable_binding`
+      |             help: make this binding mutable: `mut _immutable_binding`
+   ...
+   13 |         _immutable_binding += 1;
+      |         ^^^^^^^^^^^^^^^^^^^^^^^ cannot assign twice to immutable variable
+   
+   error: aborting due to previous error
+   
+   For more information about this error, try `rustc --explain E0384`.
+   error: could not compile `playground`.
+   ```
 ]
-
-.right-column[
-
-- пример 1: 
+---
+##Примеры кода
+.content[
+  Автоматичсекий вывод типов:
+  ```rust
+  let mut vec = Vec::new();
+  let text = "Message";
+  vec.push(text);
   ```
+
+  Generic data type:
+  ```rust
   struct Point<T> {
     x: T,
     y: T,
@@ -209,30 +224,15 @@ Reliability
   let int_origin = Point { x: 0, y: 0 };
   let float_origin = Point { x: 0.0, y: 0.0 };
   ```
-  пример 2:
-  ```
-  let mut vec = Vec::new();
-  let text = "Message";
-  vec.push(text);
-  ```
 
 ]
+
 ---
-.left-column[
-# Почему
+class: middle
+.content[
 
-Perfomance
-
-Reliability
-
-##Productivity
-
-]
-
-.right-column[
-
-- пример 3: 
-  ```
+- Трейты
+  ```rust
   use std::ops::Add;
 
   struct Point {
@@ -243,7 +243,7 @@ Reliability
   impl Add for Point {
       type Output = Point;
   
-      fn add(self, other: Point) -> Point {
+      fn add(self, other: Point) -> Self::Output {
           Point { x: self.x + other.x, y: self.y + other.y }
       }
   }
@@ -253,24 +253,225 @@ Reliability
   
   let p3 = p1 + p2;
   ```
+  - [Запустить](https://play.rust-lang.org/?version=beta&mode=debug&edition=2015&gist=cf156963b419ea5f180b748c687f3c3a)
+  - [Версия на Дженериках](https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=910c054b8d9aa0747662e9e3b97f548d)
 
+]
+
+---
+class: middle
+.content[
+  Владение:
+  ```rust
+  fn print_sum(v: Vec<i32>) {
+    println!("A Sum is: {}", v[0] + v[1]);
+    // v is dropped and deallocated here
+  }
+
+  fn main() {
+      let mut v = Vec::new();
+      for i in 1..10 {
+          v.push(i);
+      }
+      print_sum(v);
+      // println!("A Sum is: {}", v[0] + v[1]);
+  }
+  ```
+  [Запустить](https://play.rust-lang.org/?version=beta&mode=debug&edition=2015&gist=1fbf9b21ed859f8b327af329caf2f383)
+]
+
+---
+class: middle
+.content[
+  Владение:
+  ```rust
+      print_sum(v);
+      println!("A Sum is: {}", v[0] + v[1]);
+  }
+  ```
+  [Запустить](https://play.rust-lang.org/?version=beta&mode=debug&edition=2015&gist=798c5d819fd4aff293106030facb55a6)
+  
+  ```bash
+  error[E0382]: borrow of moved value: `v`
+  --> src/main.rs:12:30
+     |
+  7  |     let mut v = Vec::new();
+     |         ----- move occurs because `v` has type `std::vec::Vec<i32>`, which does not implement the `Copy` trait
+  ...
+  11 |     print_sum(v);
+     |               - value moved here
+  12 |     println!("A Sum is: {}", v[0] + v[1]);
+     |                              ^ value borrowed here after move
+  
+  error: aborting due to previous error
+  
+  For more information about this error, try `rustc --explain E0382`.
+  error: could not compile `playground`.
+  
+  To learn more, run the command again with --verbose.
+```
 ]
 ---
-.left-column[
-# Почему
+class: middle
+.content[
+  FizzBuzz:
+  ```rust
+  use std::fmt;
 
-Perfomance
+  enum Term {
+      Fizz,
+      Buzz,
+      FizzBuzz,
+      Number(i32),
+  }
+  
+  ...
+  
+  fn fizz_buzz(i: i32) -> Term {
+      match (i % 3, i % 5) {
+          (0, 0) => Term::FizzBuzz,
+          (_, 0) => Term::Buzz,
+          (0, _) => Term::Fizz,
+          (_, _) => Term::Number(i),
+      }
+  }
+  fn main() {
+     let result:Vec<_> = (1..101).map(fizz_buzz).collect();
+     println!("{:?}", result)
+  }
+  ```
+  [Запустить](https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=fd31a132a4b2805056a1e8b81f12127f)
+]
+---
 
-Reliability
+class: middle
+.content[
+  Функциональный и императивный стиль:
+  ```rust
+  let xs = vec!["lorem", "ipsum", "dolor"];
 
-##Productivity
-
+  let mut result = Vec::new();
+  for i in 0..xs.len() {
+    if result.len() <= 5 && xs[i].ends_with('m') {
+      result.push(xs[i]);
+    }
+  }
+  return result;
+  ```
+ ```rust
+ let xs = vec!["lorem", "ipsum", "dolor"];
+ xs.iter()
+   .filter(|item| item.ends_with('m'))
+   .take(5)
+   .collect()
+ ```
 ]
 
-.right-column[
+---
+class: middle
+.content[
+  Тип Result:
+  ```rust
+  pub enum Result<T, E> {
+    Ok(T),
+    Err(E),
+  }
+  ```
+ ```rust
+ use std::num::ParseIntError;
+
+ fn main() -> Result<(), ParseIntError> {
+     let number_str = "10";
+     let number = match number_str.parse::<i32>() {
+         Ok(number)  => number,
+         Err(e) => return Err(e),
+     };
+     println!("{}", number);
+     Ok(())
+ }
+ ```
+ ```rust
+ // box-error.rs
+ use std::fs::File;
+ use std::io::prelude::*;
+ use std::error::Error;
+ 
+ fn run(file: &str) -> Result<i32,Box<Error>> {
+     let mut file = File::open(file)?;
+     let mut contents = String::new();
+     file.read_to_string(&mut contents)?;
+     Ok(contents.trim().parse()?)
+ }
+ ```
+]
+
+---
+class: middle
+.content[
+  Тип Option:
+  ```rust
+  pub enum Option<T> {
+    None,
+    Some(T),
+  }
+  ```
+ ```rust
+ fn divide(numerator: f64, denominator: f64) -> Option<f64> {
+  if denominator == 0.0 {
+      None
+  } else {
+      Some(numerator / denominator)
+  }
+}
+
+// The return value of the function is an option
+let result = divide(2.0, 3.0);
+
+// Pattern match to retrieve the value
+match result {
+  // The division was valid
+  Some(x) => println!("Result: {}", x),
+  // The division was invalid
+  None    => println!("Cannot divide by 0"),
+}
+ ```
+]
+---
+class: middle
+.content[
+  JSON:
+  ```rust
+use serde::{Deserialize, Serialize};
+use serde_json::Result;
+
+#[derive(Serialize, Deserialize, Debug)]
+#[serde(untagged)]
+enum DeliveryID<T> {
+    One(T),
+    Many(Vec<T>)
+}
+#[derive(Serialize, Deserialize, Debug)]
+struct Search<T> {
+    delivery_id: DeliveryID<T>,
+}
+
+fn main() -> Result<()> {
+    let data = r#"
+        {
+           "delivery_id": [1, 2 ]
+        }"#;
+
+    let s: Search<u32> = serde_json::from_str(data)?;
+    dbg!(s);
+}
+ ```
+ [Запустить](https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=7aecf770bed137f41c77a44d40b782e2)
+]
+---
+.content[
 
 - Встроенные тесты:
-   ```
+   ```rust
    pub fn is_false(a: bool) -> bool {
     !a
    }
@@ -299,8 +500,24 @@ Reliability
    ```
    
 ]
-   
+---
+
+class: middle
+.content[
+ ##Узнать больше
+ - [Rustbook](https://doc.rust-lang.org/stable/book/)
+ - [Видеолекции от Алексея Кладова](https://www.youtube.com/playlist?list=PLlb7e2G7aSpTfhiECYNI2EZ1uAluUqE_e)
+ - [Rust talent plan](https://github.com/pingcap/talent-plan/tree/master/rust)
 ]
+---
+
+class: center, middle
+.content[
+.center[
+.top-img[![THE END](giphy__33_.gif)]
+]
+]
+
 
 
     </textarea>
