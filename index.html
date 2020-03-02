@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Rust</title>
+    <title>Множетсво Мандельброта</title>
     <meta charset="utf-8">
     <style>
       @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
@@ -43,27 +43,59 @@
 class: center, middle
 
 
-.center[![RUST](qr-code.gif)]
+.center[![Множество мандельброта](qr-code.gif)]
 
 
 ---
 class: center, middle
-.center[![RUST](https://upload.wikimedia.org/wikipedia/ru/d/d5/Rust_programming_language_black_logo.svg)]
-.center[
-# Rust
-[rʌst] - раст
+.content[
+.top-img[![Множество мандельброта](mandelbrot.jpg)]]
 
-A language empowering everyone
-to build reliable and efficient software.
 
-]
+---
+class: center, middle
+.content[
+.top-img[![Множество мандельброта](1.png)]]
+
+---
+class: center, middle
+.content[
+.top-img[![Множество мандельброта](2.jpg)]]
+
+
+---
+class: center, middle
+.content[
+.top-img[![Множество мандельброта](3.jpg)]]
+
+
+---
+class: center, middle
+.content[
+.top-img[![Множество мандельброта](4.jpg)]]
+
+---
+class: center, middle
+.content[
+.top-img[![Множество мандельброта](Mandelbrot_zoom_1.gif)]]
 
 ---
 
+
 .content[
-#.center[StackOverflow's most loved language]
-.top-img[![RUST](screen.png)]
+#.center[![Мандельброт](mandelbrot_benua.jpg)]
+
 ]
+$$z_{n+1} = z_n^2 + c, z_0 = 0$$  
+
+$$x_{n+1} = x_n^2 - y_n^2 + x_0$$
+
+$$y_{n+1} = 2x_ny_n + y_0$$
+
+ - число 1: $$z_0 = 0; z_1 = 0 + 1; z_2 = 2; z_3 = 5; z_4 = 26$$ 
+ - больше примеров (https://www.geogebra.org/m/BUVhcRSv#material/Npd3kBKn)
+
+
 ---
 
 class: middle
@@ -529,8 +561,16 @@ class: center, middle
     </textarea>
     <script src="https://remarkjs.com/downloads/remark-latest.min.js">
     </script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML&delayStartupUntil=configured" type="text/javascript"></script>
     <script>
       var slideshow = remark.create();
+      MathJax.Hub.Config({
+          tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+          }
+      });
+
+      MathJax.Hub.Configured();
     </script>
   </body>
 </html>
