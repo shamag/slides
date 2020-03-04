@@ -73,6 +73,10 @@ class: center, middle
 class: center, middle
 .content[
 .top-img[![Множество мандельброта](4.jpg)]]
+---
+class: center, middle
+.content[
+.top-img[![Множество мандельброта](buddha.png)]]
 
 ---
 class: center, middle
@@ -91,15 +95,15 @@ class: center, middle
 #.center[![Мандельброт](mandelbrot_benua.jpg)]
 
 ]
-$$z_{n+1} = z_n^2 + c, z_0 = 0$$  
+$$z_{n+1} = z_n^2 + c, z_0 = 0$$
 
 $$x_{n+1} = x_n^2 - y_n^2 + x_0$$
 
 $$y_{n+1} = 2x_ny_n + y_0$$
 
- - число 1+0i: $$z_0 = 0; z_1 = 0 + 1; z_2 = 2; z_3 = 5; z_4 = 26$$ 
+ - число 1+0i: $$z_0 = 0; z_1 = 0 + 1; z_2 = 2; z_3 = 5; z_4 = 26$$
  - больше примеров (https://www.geogebra.org/m/BUVhcRSv#material/Npd3kBKn)
- 
+
 ---
 
 class: middle
@@ -109,7 +113,7 @@ class: middle
 
    pub trait MandelbrotRenderer {
        fn new(dims: (usize, usize)) -> Self where Self: Sized;
-       fn render(&self, xr: std::ops::Range<f64>, yr: std::ops::Range<f64>, 
+       fn render(&self, xr: std::ops::Range<f64>, yr: std::ops::Range<f64>,
                      limit: usize) -> Result<Vec<u64>, Box<dyn Error>>;
    }```
    ```rust
@@ -150,9 +154,9 @@ class: middle
                   let y = idx / (width as usize);
                   let dx = (xr.end - xr.start) / (width as f64);
                   let dy = (yr.end - yr.start) / (height as f64);
-                  let point = Complex { 
-                    re: xr.start + x as f64 * dx, 
-                    im: yr.start + y as f64 * dy 
+                  let point = Complex {
+                    re: xr.start + x as f64 * dx,
+                    im: yr.start + y as f64 * dy
                   };
                   escapes(
                       point,
@@ -216,9 +220,9 @@ class: middle
                 let y = idx / (width as usize);
                 let dx = (xr.end - xr.start) / (width as f64);
                 let dy = (yr.end - yr.start) / (height as f64);
-                let point = Complex { 
-                  re: xr.start + x as f64 * dx, 
-                  im: yr.start + y as f64 * dy 
+                let point = Complex {
+                  re: xr.start + x as f64 * dx,
+                  im: yr.start + y as f64 * dy
                 };
                 escapes(
                     point,
@@ -284,7 +288,7 @@ class: middle
    int index(int x, int y, int width) {
       return width*y + x;
    }
-  __kernel void render(__global size_t *out, float x_s, float x_e, float y_s, 
+  __kernel void render(__global size_t *out, float x_s, float x_e, float y_s,
                        float y_e,  int limit) {
       int x_dim = get_global_id(0);
       int y_dim = get_global_id(1);
@@ -322,25 +326,26 @@ class: middle
    Running target/release/deps/my_benchmark-42db757faee96c61
    Benchmarking Mandelbrot/single: Warming up for 3.0000 s
    Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 182.5s.
-   Mandelbrot/single       time:   [3.2940 s 3.3181 s 3.3464 s]                               
+   Mandelbrot/single       time:   [3.2940 s 3.3181 s 3.3464 s]
                            change: [-0.4110% +0.1402% +0.7136%] (p = 0.62 > 0.05)
                            No change in performance detected.
    Benchmarking Mandelbrot/multi: Warming up for 3.0000 s
    Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 17.1s.
-   Mandelbrot/multi        time:   [307.54 ms 309.33 ms 311.42 ms]                           
+   Mandelbrot/multi        time:   [307.54 ms 309.33 ms 311.42 ms]
                            change: [+0.8337% +1.5671% +2.2605%] (p = 0.00 < 0.05)
                            Change within noise threshold.
    Benchmarking Mandelbrot/simd: Warming up for 3.0000 s
    Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 5.7s.
-   Mandelbrot/simd         time:   [103.45 ms 104.32 ms 105.69 ms]                          
+   Mandelbrot/simd         time:   [103.45 ms 104.32 ms 105.69 ms]
                            change: [+0.3888% +1.9721% +4.0690%] (p = 0.03 < 0.05)
                            Change within noise threshold.
    Found 1 outliers among 10 measurements (10.00%)
      1 (10.00%) high mild
-   Mandelbrot/opencl       time:   [14.389 ms 14.563 ms 14.780 ms]                             
+   Mandelbrot/opencl       time:   [14.389 ms 14.563 ms 14.780 ms]
                            change: [+0.4334% +1.4221% +2.6575%] (p = 0.02 < 0.05)
                            Change within noise threshold.
 ```
+- .center[(https://bitbucket.goods.ru/projects/LEAR/repos/mandelbrot/browse)]
 ]
 
 ---
