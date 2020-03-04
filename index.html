@@ -80,6 +80,11 @@ class: center, middle
 .top-img[![Множество мандельброта](Mandelbrot_zoom_1.gif)]]
 
 ---
+class: center, middle
+.content[
+.top-img[![Мандельброт](https://img.youtube.com/vi/u1pwtSBTnPU/0.jpg)](https://www.youtube.com/watch?v=u1pwtSBTnPU)
+]
+---
 
 
 .content[
@@ -92,461 +97,252 @@ $$x_{n+1} = x_n^2 - y_n^2 + x_0$$
 
 $$y_{n+1} = 2x_ny_n + y_0$$
 
- - число 1: $$z_0 = 0; z_1 = 0 + 1; z_2 = 2; z_3 = 5; z_4 = 26$$ 
+ - число 1+0i: $$z_0 = 0; z_1 = 0 + 1; z_2 = 2; z_3 = 5; z_4 = 26$$ 
  - больше примеров (https://www.geogebra.org/m/BUVhcRSv#material/Npd3kBKn)
-
-
+ 
 ---
 
 class: middle
 .content[
-#.center[]
-##Кто использует
-- Amazon (https://github.com/firecracker-microvm/firecracker)
-
-- Microsoft (
-  https://msrc-blog.microsoft.com/2019/09/30/building-the-azure-iot-edge-security-daemon-in-rust/
-  )
-
-- Cloudflare (https://blog.cloudflare.com/tag/rust/)
-
-- Linkerd (https://github.com/linkerd/linkerd2-proxy)
-
-- Figma (https://www.figma.com/blog/rust-in-production-at-figma/)
-]
----
-
-class: middle
-.content[
-#.center[]
-
-- bat (https://github.com/sharkdp/bat)
-
-.center[![BAT](https://camo.githubusercontent.com/e3508b01c13eb055f293edb8e24d283c055b2dc1/68747470733a2f2f692e696d6775722e636f6d2f576e64477039482e706e67)]
-]
-
-- Линус Торвальдс про rust:
-> That's not a new phenomenon at all. We've had the system people who used Modula-2 or Ada, and I have to say Rust looks a lot better than either of those two disasters
-https://www.infoworld.com/article/3109150/linux-at-25-linus-torvalds-on-the-evolution-and-future-of-linux.html
-]
-
----
-class: center, middle
-.content[
-.center[
-.top-img[![PL](giphy__41_.gif)]
-]
-]
----
-
-class: middle
-.content[
-##Perfomance
-
-- Примерно на уровне С
-
-- Почти на порядок быстрее Go, Java в CPU-bound задачах (Нет GC)
-
-- [Бенчмарк 1](https://benchmarksgame-team.pages.debian.net/benchmarksgame/fastest/rust-go.html)
-
-- [Бенчмарк 2](https://www.techempower.com/benchmarks/#section=data-r18&hw=ph&test=fortune)
-]
-
----
-.content[
-##Reliability
-- Нет UB
-
-- Memory safety at compile time
-.top-img[![CVE](graph-1024x398.png)]
- https://msrc-blog.microsoft.com/2019/07/16/a-proactive-approach-to-more-secure-code/
-
-- Нет data races
-
-]
----
-class: center, middle
-.content[
-.center[
-.top-img[![PL](49125506.jpg)]
-]
-]
-
----
-##Productivity
-.content[
-
-- Удобные инструменты сборки и управления зависимостями (cargo), пример конфигурационного файла:
-   ```toml
-   [package]
-   name = "some_app"
-   version = "0.1.0"
-   authors = ["Your Name <you@example.com>"]
-   
-   [dependencies]
-   regex = "1.0"
-   chrono = "0.4"
-   
-   [dev-dependencies]
-   rand = "*"
-   ```
-   Примеры команд:
-   ```bash
-   $ cargo check
-   $ cargo test
-   $ cargo run
-   ```
-]
----
-
-.content[
-
-- "Дружелюбный" компилятор:
+- В коде:
    ```rust
-   fn main() {
-      let _immutable_binding = 1;
-      let mut mutable_binding = 1;
-      println!("Before mutation: {}", mutable_binding);
-      // Ok
-      mutable_binding += 1;
-      println!("After mutation: {}", mutable_binding);
-      // Error!
-      _immutable_binding += 1;
-      // FIXME ^ Comment out this line
-   }
-   ```
-   [Запустить](https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=ba301bf091afe1712d50f2572d4ba59e)
-   
-   ```bash
-   error[E0384]: cannot assign twice to immutable variable `_immutable_binding`
-     --> src/main.rs:13:9
-      |
-   2  |         let _immutable_binding = 1;
-      |             ------------------
-      |             |
-      |             first assignment to `_immutable_binding`
-      |             help: make this binding mutable: `mut _immutable_binding`
-   ...
-   13 |         _immutable_binding += 1;
-      |         ^^^^^^^^^^^^^^^^^^^^^^^ cannot assign twice to immutable variable
-   
-   error: aborting due to previous error
-   
-   For more information about this error, try `rustc --explain E0384`.
-   error: could not compile `playground`.
+
+   pub trait MandelbrotRenderer {
+       fn new(dims: (usize, usize)) -> Self where Self: Sized;
+       fn render(&self, xr: std::ops::Range<f64>, yr: std::ops::Range<f64>, 
+                     limit: usize) -> Result<Vec<u64>, Box<dyn Error>>;
+   }```
+   ```rust
+
+      fn escapes(c: Complex<f64>, limit: u64) -> u64 {
+          let mut z = Complex { re: 0.0, im: 0.0 };
+          for i in 0..limit {
+              z = z*z + c;
+              if z.norm_sqr() > 4.0 {
+                  return i;
+              }
+          }
+          limit
+      }
+
    ```
 ]
----
-##Примеры кода
-.content[
-  Автоматичсекий вывод типов:
-  ```rust
-  let mut vec = Vec::new();
-  let text = "Message";
-  vec.push(text);
-  ```
-
-  Generics:
-  ```rust
-  struct Point<T> {
-    x: T,
-    y: T,
-  }
-
-  let int_origin = Point { x: 0, y: 0 };
-  let float_origin = Point { x: 0.0, y: 0.0 };
-  ```
-  ```rust
-  // Define a function `printer` that takes a generic type `T` which
-  // must implement trait `Display`.
-  fn printer<T: Display>(t: T) {
-    println!("{}", t);
-  }```
-
-]
 
 ---
+
 class: middle
 .content[
-
-- Трейты
-  ```rust
-  use std::ops::Add;
-
-  struct Point {
-      x: i32,
-      y: i32,
-  }
-  
-  impl Add for Point {
-      type Output = Point;
-  
-      fn add(self, other: Point) -> Self::Output {
-          Point { x: self.x + other.x, y: self.y + other.y }
+- Один поток - 350мс (1000x1000):
+   ```rust
+    pub struct SingleMandelbrot{
+      dims: (usize, usize)
+    }
+    impl MandelbrotRenderer for SingleMandelbrot {
+      fn new(dims: (usize, usize)) -> SingleMandelbrot {
+          SingleMandelbrot { dims }
+      }
+      fn render(&self, xr: std::ops::Range<f64>, yr: std::ops::Range<f64>,
+         limit: usize) -> Result<Vec<u64>, Box<dyn Error>> {
+          let (width, height) = self.dims;
+          let colors = (0..(width * height) as usize)
+              .map(|idx| {
+                  let x = idx % (width as usize) ;
+                  let y = idx / (width as usize);
+                  let dx = (xr.end - xr.start) / (width as f64);
+                  let dy = (yr.end - yr.start) / (height as f64);
+                  let point = Complex { 
+                    re: xr.start + x as f64 * dx, 
+                    im: yr.start + y as f64 * dy 
+                  };
+                  escapes(
+                      point,
+                      limit as u64,
+                  )
+              })
+              .collect::<Vec<u64>>();
+          Ok(colors)
       }
   }
-  
-  let p1 = Point { x: 1, y: 0 };
-  let p2 = Point { x: 2, y: 3 };
-  
-  let p3 = p1 + p2;
-  ```
-  - [Запустить](https://play.rust-lang.org/?version=beta&mode=debug&edition=2015&gist=cf156963b419ea5f180b748c687f3c3a)
-  - [Версия на Дженериках](https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=910c054b8d9aa0747662e9e3b97f548d)
-
+   ```
 ]
+---
 
+class: middle
+.content[
+- Раскрашиваем:
+   ```rust
+      let buffer= renderer.render(xr, yr, self.limit as usize).unwrap()
+          .iter()
+          .flat_map(|item| {
+              let wrapped = if *item < (iterations-1.0) as u64{
+                  Some(*item as usize)
+              } else {
+                  None
+              };
+              self.get_color(&wrapped) //vec![0xb4, 0x92, 0x2f, 255]
+          })
+          .collect::<Vec<u8>>();
+
+        self.fractal_buffer = buffer;
+
+        self.fractal_rendered = true;
+
+        // вывод изображения
+        let fractal = graphics::Image::from_rgba8(
+            ctx,
+            WINDOW_WIDTH as u16,
+            WINDOW_HEIGHT as u16,
+            &self.fractal_buffer
+        ).unwrap();
+   ```
+]
+---
+
+class: middle
+.content[
+- 12 потоков - 32мс (1000x1000):
+   ```rust
+   impl MandelbrotRenderer for MultiMandelbrot {
+    fn new(dims: (usize, usize)) -> MultiMandelbrot {
+        MultiMandelbrot { dims }
+    }
+    fn render(&self, xr: std::ops::Range<f64>, yr: std::ops::Range<f64>,
+       limit: usize) -> Result<Vec<u64>, Box<dyn Error>> {
+        let (width, height) = self.dims;
+        let colors = (0..(width * height) as usize)
+            .into_par_iter()
+            .map(|idx| {
+                let x = idx % (width as usize) ;
+                let y = idx / (width as usize);
+                let dx = (xr.end - xr.start) / (width as f64);
+                let dy = (yr.end - yr.start) / (height as f64);
+                let point = Complex { 
+                  re: xr.start + x as f64 * dx, 
+                  im: yr.start + y as f64 * dy 
+                };
+                escapes(
+                    point,
+                    limit as u64,
+                )
+            })
+            .collect::<Vec<u64>>();
+        Ok(colors)
+    }
+}
+   ```
+]
 ---
 class: middle
 .content[
-  Владение:
-  ```rust
-  fn print_sum(v: Vec<i32>) {
-    println!("A Sum is: {}", v[0] + v[1]);
-    // v is dropped and deallocated here
-  }
+# SIMD:
+#.center[
+.top-img[![SIMD](simd.jpeg)]
+]
+]
+---
 
-  fn main() {
-      let mut v = Vec::new();
-      for i in 1..10 {
-          v.push(i);
+class: middle
+.content[
+- 12 потоков + simd - 11мс (1000x1000):
+   ```rust
+struct Complexx8 { real: f64x8, imag: f64x8 }
+impl Complexx8 {
+  fn escapes(self, threshold: f64, limit: usize) -> u64x8 {
+      let mut count = u64x8::splat(0);
+      let mut z = self;
+      for _ in 0..limit {
+          let x = z.real; let y = z.imag;
+          let xx = x * x; let yy = y * y;
+          let sum = xx + yy;
+          let escapes = sum.le(f64x8::splat(threshold));
+          if escapes.none() {
+              break
+          }
+          count += escapes.select(u64x8::splat(1), u64x8::splat(0));
+          z = z.next_point(self);
       }
-      print_sum(v);
-      // println!("A Sum is: {}", v[0] + v[1]);
+      count
   }
-  ```
-  [Запустить](https://play.rust-lang.org/?version=beta&mode=debug&edition=2015&gist=1fbf9b21ed859f8b327af329caf2f383)
-]
-
----
-class: middle
-.content[
-  Владение:
-  ```rust
-      print_sum(v);
-      println!("A Sum is: {}", v[0] + v[1]);
+  fn next_point(self, start: Complexx8) -> Complexx8 {
+      let Complexx8 { real: c_x, imag: c_y } = start;
+      let Complexx8 { real: x, imag: y } = self;
+      let xx = x * x; let yy = y * y;
+      let xy = x * y;
+      let new_x = c_x + (xx - yy);
+      let new_y = c_y + (xy + xy);
+      Complexx8 { real: new_x, imag: new_y}
   }
-  ```
-  [Запустить](https://play.rust-lang.org/?version=beta&mode=debug&edition=2015&gist=798c5d819fd4aff293106030facb55a6)
-  
-  ```bash
-  error[E0382]: borrow of moved value: `v`
-  --> src/main.rs:12:30
-     |
-  7  |     let mut v = Vec::new();
-     |         ----- move occurs because `v` has type `std::vec::Vec<i32>`, which does not implement the `Copy` trait
-  ...
-  11 |     print_sum(v);
-     |               - value moved here
-  12 |     println!("A Sum is: {}", v[0] + v[1]);
-     |                              ^ value borrowed here after move
-  
-  error: aborting due to previous error
-  
-  For more information about this error, try `rustc --explain E0382`.
-  error: could not compile `playground`.
-  
-  To learn more, run the command again with --verbose.
+}
 ```
 ]
 ---
+
 class: middle
 .content[
-  FizzBuzz:
-  ```rust
-  use std::fmt;
-
-  enum Term {
-      Fizz,
-      Buzz,
-      FizzBuzz,
-      Number(i32),
-  }
-  
-  ...
-  
-  fn fizz_buzz(i: i32) -> Term {
-      match (i % 3, i % 5) {
-          (0, 0) => Term::FizzBuzz,
-          (_, 0) => Term::Buzz,
-          (0, _) => Term::Fizz,
-          (_, _) => Term::Number(i),
+- openCL - 2мс (1000x1000):
+   ```c
+   int index(int x, int y, int width) {
+      return width*y + x;
+   }
+  __kernel void render(__global size_t *out, float x_s, float x_e, float y_s, 
+                       float y_e,  int limit) {
+      int x_dim = get_global_id(0);
+      int y_dim = get_global_id(1);
+      size_t width = get_global_size(0);
+      size_t height = get_global_size(1);
+      int idx = index(x_dim, y_dim, width);
+      float dx = (x_e - x_s) / width;
+      float dy = (y_e - y_s) / height;
+      float x_origin = x_s + dx * x_dim;
+      float y_origin = y_s + dy * y_dim;
+      float x = 0.0;
+      float y = 0.0;
+      int iteration = 0;
+      int max_iteration = limit;
+      while(x*x + y*y <= 4 && iteration < max_iteration) {
+        float xtemp = x*x - y*y + x_origin;
+        y = 2*x*y + y_origin;
+        x = xtemp;
+        iteration++;
+      }
+      if(iteration == max_iteration) {
+        out[idx] = max_iteration;
+      } else {
+        out[idx] = iteration;
       }
   }
-  fn main() {
-     let result:Vec<_> = (1..101).map(fizz_buzz).collect();
-     println!("{:?}", result)
-  }
-  ```
-  [Запустить](https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=fd31a132a4b2805056a1e8b81f12127f)
-]
----
-
-class: middle
-.content[
-  Функциональный и императивный стиль:
-  ```rust
-  let xs = vec!["lorem", "ipsum", "dolor"];
-
-  let mut result = Vec::new();
-  for i in 0..xs.len() {
-    if result.len() <= 5 && xs[i].ends_with('m') {
-      result.push(xs[i]);
-    }
-  }
-  return result;
-  ```
- ```rust
- let xs = vec!["lorem", "ipsum", "dolor"];
- xs.iter()
-   .filter(|item| item.ends_with('m'))
-   .take(5)
-   .collect()
- ```
+```
 ]
 
 ---
 class: middle
 .content[
-  Тип Result:
-  ```rust
-  pub enum Result<T, E> {
-    Ok(T),
-    Err(E),
-  }
-  ```
- ```rust
- use std::num::ParseIntError;
-
- fn main() -> Result<(), ParseIntError> {
-     let number_str = "10";
-     let number = match number_str.parse::<i32>() {
-         Ok(number)  => number,
-         Err(e) => return Err(e),
-     };
-     println!("{}", number);
-     Ok(())
- }
- ```
- ```rust
- // box-error.rs
- use std::fs::File;
- use std::io::prelude::*;
- use std::error::Error;
- 
- fn run(file: &str) -> Result<i32,Box<Error>> {
-     let mut file = File::open(file)?;
-     let mut contents = String::new();
-     file.read_to_string(&mut contents)?;
-     Ok(contents.trim().parse()?)
- }
- ```
+- Бенчмарк:
+   ```c
+   Running target/release/deps/my_benchmark-42db757faee96c61
+   Benchmarking Mandelbrot/single: Warming up for 3.0000 s
+   Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 182.5s.
+   Mandelbrot/single       time:   [3.2940 s 3.3181 s 3.3464 s]                               
+                           change: [-0.4110% +0.1402% +0.7136%] (p = 0.62 > 0.05)
+                           No change in performance detected.
+   Benchmarking Mandelbrot/multi: Warming up for 3.0000 s
+   Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 17.1s.
+   Mandelbrot/multi        time:   [307.54 ms 309.33 ms 311.42 ms]                           
+                           change: [+0.8337% +1.5671% +2.2605%] (p = 0.00 < 0.05)
+                           Change within noise threshold.
+   Benchmarking Mandelbrot/simd: Warming up for 3.0000 s
+   Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 5.7s.
+   Mandelbrot/simd         time:   [103.45 ms 104.32 ms 105.69 ms]                          
+                           change: [+0.3888% +1.9721% +4.0690%] (p = 0.03 < 0.05)
+                           Change within noise threshold.
+   Found 1 outliers among 10 measurements (10.00%)
+     1 (10.00%) high mild
+   Mandelbrot/opencl       time:   [14.389 ms 14.563 ms 14.780 ms]                             
+                           change: [+0.4334% +1.4221% +2.6575%] (p = 0.02 < 0.05)
+                           Change within noise threshold.
+```
 ]
 
----
-class: middle
-.content[
-  Тип Option:
-  ```rust
-  pub enum Option<T> {
-    None,
-    Some(T),
-  }
-  ```
- ```rust
- fn divide(numerator: f64, denominator: f64) -> Option<f64> {
-  if denominator == 0.0 {
-      None
-  } else {
-      Some(numerator / denominator)
-  }
-}
-
-// The return value of the function is an option
-let result = divide(2.0, 3.0);
-
-// Pattern match to retrieve the value
-match result {
-  // The division was valid
-  Some(x) => println!("Result: {}", x),
-  // The division was invalid
-  None    => println!("Cannot divide by 0"),
-}
- ```
-]
----
-class: middle
-.content[
-  JSON:
-  ```rust
-use serde::{Deserialize, Serialize};
-use serde_json::Result;
-
-#[derive(Serialize, Deserialize, Debug)]
-#[serde(untagged)]
-enum DeliveryID<T> {
-    One(T),
-    Many(Vec<T>)
-}
-#[derive(Serialize, Deserialize, Debug)]
-struct Search<T> {
-    delivery_id: DeliveryID<T>,
-}
-
-fn main() -> Result<()> {
-    let data = r#"
-        {
-           "delivery_id": [1, 2 ]
-        }"#;
-
-    let s: Search<u32> = serde_json::from_str(data)?;
-    dbg!(s);
-}
- ```
- [Запустить](https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=7aecf770bed137f41c77a44d40b782e2)
-]
----
-.content[
-
-- Встроенные тесты:
-   ```rust
-   pub fn is_false(a: bool) -> bool {
-    !a
-   }
-
-   pub fn add_two(a: i32) -> i32 {
-       a + 2
-   }
-   
-   #[cfg(test)]
-   mod test {
-       use super::*;
-   
-       #[test]
-       fn is_false_works() {
-           assert!(is_false(false));
-           assert!(!is_false(true));
-       }
-   
-       #[test]
-       fn add_two_works() {
-           assert_eq!(1, add_two(-1));
-           assert_eq!(2, add_two(0));
-           assert_eq!(4, add_two(2));
-       }
-   }
-   ```
-   
-]
----
-
-class: middle
-.content[
- ##Узнать больше
- - [Rustbook](https://doc.rust-lang.org/stable/book/)
- - [Видеолекции от Алексея Кладова](https://www.youtube.com/playlist?list=PLlb7e2G7aSpTfhiECYNI2EZ1uAluUqE_e)
- - [Rust talent plan](https://github.com/pingcap/talent-plan/tree/master/rust)
-]
 ---
 
 class: center, middle
